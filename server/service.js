@@ -24,13 +24,15 @@ function getStopsInArea(coordX, coordY, maxDistance, callback) {
                 var doc = new dom().parseFromString(receivedData);
                 var nodes = xpath.select("//LocationList/StopLocation", doc);
                 var locations = [];
+                // According to http://xmlopen.rejseplanen.dk/xml/rest/hafasRestStopsNearby.xsd, coordX, coordY and distance are ints.
+                // Parse them accordingly and create a JSON object
                 nodes.forEach(function (node) {
                     locations.push({
                         id: node.getAttribute("id"),
                         name: node.getAttribute("name"),
-                        coordX: node.getAttribute("x"),
-                        coordY: node.getAttribute("y"),
-                        distance: node.getAttribute("distance")
+                        coordX: parseInt(node.getAttribute("x")),
+                        coordY: parseInt(node.getAttribute("y")),
+                        distance: parseInt(node.getAttribute("distance"))
                     });
                 });
                 callback(locations);
