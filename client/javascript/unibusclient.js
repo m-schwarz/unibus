@@ -8,24 +8,23 @@ $(function () {
         }
     });
 
-    var currentLocation = new CurrentLocation();
 
     var LocationView = Backbone.View.extend({
 
         initialize: function () {
             // binds 'this' for the methods. There clearly must be a more clever way of doing this?
-            _.bindAll(this, 'storePosition', 'getAndWatchLocation', 'renderPositionTemplate');
-            this.renderPositionTemplate(currentLocation);
-            currentLocation.on("change", this.renderPositionTemplate);
+            _.bindAll(this, 'storePosition', 'getAndWatchLocation', 'render');
             this.getAndWatchLocation(this.storePosition);
+            this.render();
+            this.model.bind('change', this.render);
         },
 
         el: $('#location'),
 
-        renderPositionTemplate: function (currentLocation) {
+        render: function () {
             locationTemplate = _.template($("#location-template").html());
-            var latitute = currentLocation.get("latitute");
-            var longitute = currentLocation.get("longitute");
+            var latitute = this.model.get("latitute");
+            var longitute = this.model.get("longitute");
             if (latitute == -1 || longitute == -1) {
                 this.$el.text("Please wait. Trying to determine your location...");
             } else
@@ -39,7 +38,7 @@ $(function () {
         storePosition: function (position) {
             var latitude = position.coords.latitude;
             var longitude = position.coords.longitude;
-            currentLocation.set({latitute: latitude, longitute: longitude});
+            this.model.set({latitute: latitude, longitute: longitude});
         },
 
         getAndWatchLocation: function (callback) {
@@ -52,5 +51,5 @@ $(function () {
         }
     });
 
-    new LocationView();
+    new LocationView({model: new CurrentLocation()});
 });
