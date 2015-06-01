@@ -7,14 +7,37 @@
     <script type="application/javascript" src="javascript/jquery-2.1.4.js"></script>
     <script type="application/javascript" src="javascript/unibusclient.js"></script>
 </head>
-    <div id="location"></div>
+<div id="location"></div>
+<div id="stops"></div>
 
-    <!-- Templates -->
-    <script type="text/template" id="location-template">
+
+<!-- Templates -->
+<script type="text/template" id="location-template">
     <div class="view">
         <table>
-            <tr><td>Longitute:</td><td><%- longitute %></td></tr>
-            <tr><td>Latitute:</td><td><%- latitute %></td></tr>
+            <tr>
+                <td>Longitute:</td>
+                <td><%- longitute %></td>
+            </tr>
+            <tr>
+                <td>Latitute:</td>
+                <td><%- latitute %></td>
+            </tr>
+        </table>
+    </div>
+</script>
+
+<script type="text/template" id="busstop-template">
+    <div class="view">
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td><%- name %></td>
+            </tr>
+            <tr>
+                <td>Distance:</td>
+                <td><%- distance %> meters</td>
+            </tr>
         </table>
     </div>
 </script>

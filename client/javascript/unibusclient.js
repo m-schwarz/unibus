@@ -8,6 +8,35 @@ $(function () {
         }
     });
 
+    var BusStopData = Backbone.Model.extend({
+
+        defaults: {
+            busStopList : []
+        },
+
+        initialize: function (options) {
+            _.bindAll(this, 'updateBusStopData');
+            options.location.bind('change', this.updateBusStopData);
+            this.location = options.location;
+            this.updateBusStopData();
+        },
+
+        updateBusStopData: function () {
+            var latitute = this.location.get("latitute");
+            var longitute = this.location.get("longitute");
+            var outer = this;
+            if (latitute != -1 || longitute != -1) {
+                $.get("service/stopsInArea", {
+                    coordX: Math.round(latitute * 1E6),
+                    coordY: Math.round(longitute * 1E6),
+                    distance: 1000
+                }, function (jsonBusStopList) {
+                    outer.set("busStopList", jsonBusStopList);
+                }, "json");
+            }
+        }
+    });
+
 
     var LocationView = Backbone.View.extend({
 
@@ -22,7 +51,7 @@ $(function () {
         el: $('#location'),
 
         render: function () {
-            locationTemplate = _.template($("#location-template").html());
+            var locationTemplate = _.template($("#location-template").html());
             var latitute = this.model.get("latitute");
             var longitute = this.model.get("longitute");
             if (latitute == -1 || longitute == -1) {
@@ -33,7 +62,6 @@ $(function () {
                     longitute: longitute
                 }));
         },
-
 
         storePosition: function (position) {
             var latitude = position.coords.latitude;
@@ -51,5 +79,30 @@ $(function () {
         }
     });
 
-    new LocationView({model: new CurrentLocation()});
-});
+    var LocalStopsView = Backbone.View.extend({
+        initialize: function () {
+            _.bindAll(this, 'render');
+            this.render();
+            this.model.bind('change', this.render);
+        },
+
+        el: $('#stops'),
+
+        render: function () {
+            var busStopList = this.model.get("busStopList");
+            this.$el.html("");
+            var busStopTemplate = _.template($("#busstop-template").html());
+            var outer = this;
+            busStopList.forEach(function (busStop) {
+                outer.$el.append(busStopTemplate({distance: busStop.distance, name:busStop.name}));
+            });
+        }
+
+    });
+
+    var currentLocation = new CurrentLocation();
+    var busStopData = new BusStopData({location: currentLocation});
+    new LocationView({model: currentLocation});
+    new LocalStopsView({model: busStopData});
+})
+;
