@@ -1,6 +1,10 @@
 Backbone.$ = $;
 
 $(function () {
+    /*
+    * Model definitions for the bus app
+    */
+
     var CurrentLocation = Backbone.Model.extend({
         defaults: {
             latitute: -1,
@@ -8,7 +12,7 @@ $(function () {
         }
     });
 
-    var BusStopData = Backbone.Model.extend({
+    var AreaBusStopData = Backbone.Model.extend({
 
         defaults: {
             busStopList : []
@@ -37,6 +41,14 @@ $(function () {
         }
     });
 
+    var BusStopDepartureInformation = Backbone.model.extend({
+
+
+    });
+
+    /*
+     * View definitions for the bus app
+     */
 
     var LocationView = Backbone.View.extend({
 
@@ -101,7 +113,7 @@ $(function () {
     });
 
     var currentLocation = new CurrentLocation();
-    var busStopData = new BusStopData({location: currentLocation});
+    var busStopData = new AreaBusStopData({location: currentLocation});
     new LocationView({model: currentLocation});
     new LocalStopsView({model: busStopData});
 })

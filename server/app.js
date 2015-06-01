@@ -7,6 +7,11 @@ function getStopsInArea(coordX, coordY, maxDistance, callback) {
     service.getStopsInArea(coordX, coordY, maxDistance, callback);
 }
 
+function getNextDepartures(departureBoardId, callback) {
+    service.getNextDepartures(departureBoardId, callback);
+}
+
 var exports = module.exports = {
-    getStopsInArea: getStopsInArea
+    getStopsInArea: getStopsInArea,
+    getNextDepartures: getNextDepartures
 };

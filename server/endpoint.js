@@ -19,5 +19,11 @@ router.get("/stopsInArea", function (req, res) {
     });
 });
 
+router.get("/nextDepartures", function (req, res) {
+    var departureBoardId = req.query.departureBoardId;
+    app.getNextDepartures(departureBoardId, function (nextDepartures) {
+        res.send(JSON.stringify(nextDepartures));
+    });
+});
 
 module.exports = router;
