@@ -23,7 +23,7 @@ $(function () {
             longitute: -1
         },
 
-        initialize : function() {
+        initialize: function () {
             _.bindAll(this, 'storePosition', 'getAndWatchLocation');
             this.getAndWatchLocation(this.storePosition);
         },
@@ -74,6 +74,32 @@ $(function () {
         }
     });
 
+    var SelectedBusStop = Backbone.Model.extend({
+        defaults: {
+            selectedBusStop: undefined,
+            nextDepartures: []
+        },
+
+        initialize: function () {
+            _.bindAll(this, 'updateNextDeparturesData');
+            this.bind('change:selectedBusStop', this.updateNextDeparturesData);
+            this.updateNextDeparturesData();
+        },
+
+        updateNextDeparturesData: function () {
+            var selectedBusStop = this.get("selectedBusStop");
+            if (selectedBusStop) {
+                var outer = this;
+                $.get("service/nextDepartures", {
+                        departureBoardId: selectedBusStop.id
+                    }
+                    , function (nextDepartures) {
+                        outer.set("nextDepartures", nextDepartures);
+                    }, "json");
+            }
+        }
+    });
+
 
     /*
      * View definitions for the bus app
@@ -120,6 +146,7 @@ $(function () {
             this.model.bind('change', this.render);
             options.location.bind('change', this.render);
             this.location = options.location;
+            this.selectedBusStop = options.selectedBusStop;
         },
 
         render: function () {
@@ -153,6 +180,9 @@ $(function () {
                         top: Math.round((metersYDelta / maxDistance * 100) / 2 + 50),
                         title: busStop.name + " is " + Math.abs(metersXDelta) + " meters " + (metersXDelta > 0 ? "west" : "east") + " and " + Math.abs(metersYDelta) + " meters " + (metersYDelta < 0 ? "north" : "south")
                     }));
+                    busStopElement.on("click", function () {
+                        outer.selectedBusStop.set("selectedBusStop", busStop);
+                    });
                     outer.$el.append(busStopElement);
 
 
@@ -165,21 +195,44 @@ $(function () {
     var BusStopNextDeparturesView = Backbone.View.extend({
         el: $('#next_busses'),
 
-        initialize: function () {
+        initialize: function (options) {
             _.bindAll(this, 'render');
-            this.render();
             this.model.bind('change', this.render);
+            this.selectedBusStop = options.selectedBusStop;
+            this.selectedBusStop.bind('change', this.render);
+            this.render();
         },
 
         render: function () {
+            this.$el.html("");
+            var selectedBusStop = this.selectedBusStop.get("selectedBusStop");
+            var nextDepartures = this.selectedBusStop.get("nextDepartures");
+
+            if (selectedBusStop) {
+                var nextBussesTemplate = _.template($("#next-busses-template").html());
+                var rows = "";
+                nextDepartures.forEach(function (departure) {
+                    var nextBussesRowTemplate = _.template($("#next-busses-row-template").html());
+                    rows += nextBussesRowTemplate({
+                        depTime: departure.date + " " + departure.time,
+                        name: departure.name,
+                        direction: departure.direction
+                    });
+                });
+
+                this.$el.html(nextBussesTemplate({name: selectedBusStop.name, rows: rows}));
+            }
+
         }
     });
 
 
     var currentLocation = new CurrentLocation();
     var busStopData = new AreaBusStopData({location: currentLocation});
+    var selectedBusStop = new SelectedBusStop();
 
     new CircleView();
-    new BusStopsRadarView({model: busStopData, location: currentLocation});
+    new BusStopsRadarView({model: busStopData, location: currentLocation, selectedBusStop: selectedBusStop});
+    new BusStopNextDeparturesView({model: selectedBusStop, selectedBusStop: selectedBusStop});
 })
 ;
