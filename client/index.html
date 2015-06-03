@@ -15,46 +15,13 @@
     </svg>
 </div>
 
-<div id="bus_stops" class="full">
+<div id="bus_stops" class="full"></div>
+
+<div id="next_busses"></div>
 </div>
-
-
-</div>
-
-<div id="location"></div>
-<div id="stops"></div>
 
 
 <!-- Templates -->
-<script type="text/template" id="location-template">
-    <div class="view">
-        <table>
-            <tr>
-                <td>Longitute:</td>
-                <td><%- longitute %></td>
-            </tr>
-            <tr>
-                <td>Latitute:</td>
-                <td><%- latitute %></td>
-            </tr>
-        </table>
-    </div>
-</script>
-
-<script type="text/template" id="busstop-template">
-    <div class="view">
-        <table>
-            <tr>
-                <td>Name:</td>
-                <td><%- name %></td>
-            </tr>
-            <tr>
-                <td>Distance:</td>
-                <td><%- distance %> meters</td>
-            </tr>
-        </table>
-    </div>
-</script>
 
 <script type="text/template" id="busstop-dot-template">
     <div class="busstop" style="top: <%- top %>%; left : <%- left %>%" title="<%- title %>"></div>
@@ -70,6 +37,7 @@
 
 <script type="text/template" id="next-busses-template">
     <div class="next_busses">
+        <h2><% name %></h2>
         <table>
             <tr><th></th><th>Departure time</th><th>Direction</th></tr>
             <% rows %>
@@ -82,7 +50,6 @@
         <td><% name %></td>
         <td><% depTime %></td>
         <td><% direction %></td>
-
     </tr>
 </script>
 

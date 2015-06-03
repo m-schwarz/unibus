@@ -21,6 +21,26 @@ $(function () {
         defaults: {
             latitute: -1,
             longitute: -1
+        },
+
+        initialize : function() {
+            _.bindAll(this, 'storePosition', 'getAndWatchLocation');
+            this.getAndWatchLocation(this.storePosition);
+        },
+
+        storePosition: function (position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            this.set({latitute: latitude, longitute: longitude});
+        },
+
+        getAndWatchLocation: function (callback) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(callback);
+                navigator.geolocation.watchPosition(callback);
+            } else {
+                this.$el.text("Could not find your location");
+            }
         }
     });
 
@@ -54,73 +74,10 @@ $(function () {
         }
     });
 
-    var BusStopDepartureInformation = Backbone.Model.extend({});
 
     /*
      * View definitions for the bus app
      */
-
-    var LocationView = Backbone.View.extend({
-
-        initialize: function () {
-            // binds 'this' for the methods. There clearly must be a more clever way of doing this?
-            _.bindAll(this, 'storePosition', 'getAndWatchLocation', 'render');
-            this.getAndWatchLocation(this.storePosition);
-            this.render();
-            this.model.bind('change', this.render);
-        },
-
-        el: $('#location'),
-
-        render: function () {
-            var locationTemplate = _.template($("#location-template").html());
-            var latitute = this.model.get("latitute");
-            var longitute = this.model.get("longitute");
-            if (latitute == -1 || longitute == -1) {
-                this.$el.text("Please wait. Trying to determine your location...");
-            } else
-                this.$el.html(locationTemplate({
-                    latitute: latitute,
-                    longitute: longitute
-                }));
-        },
-
-        storePosition: function (position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            this.model.set({latitute: latitude, longitute: longitude});
-        },
-
-        getAndWatchLocation: function (callback) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(callback);
-                navigator.geolocation.watchPosition(callback);
-            } else {
-                this.$el.text("Could not find your location");
-            }
-        }
-    });
-
-    var LocalStopsView = Backbone.View.extend({
-        initialize: function () {
-            _.bindAll(this, 'render');
-            this.render();
-            this.model.bind('change', this.render);
-        },
-
-        el: $('#stops'),
-
-        render: function () {
-            var busStopList = this.model.get("busStopList");
-            this.$el.html("");
-            var busStopTemplate = _.template($("#busstop-template").html());
-            var outer = this;
-            busStopList.forEach(function (busStop) {
-                outer.$el.append(busStopTemplate({distance: busStop.distance, name: busStop.name}));
-            });
-        }
-
-    });
 
     var CircleView = Backbone.View.extend({
         el: $('#circles'),
@@ -154,7 +111,7 @@ $(function () {
 
     });
 
-    var BusStopsDotView = Backbone.View.extend({
+    var BusStopsRadarView = Backbone.View.extend({
         el: $('#bus_stops'),
 
         initialize: function (options) {
@@ -205,13 +162,24 @@ $(function () {
 
     });
 
+    var BusStopNextDeparturesView = Backbone.View.extend({
+        el: $('#next_busses'),
+
+        initialize: function () {
+            _.bindAll(this, 'render');
+            this.render();
+            this.model.bind('change', this.render);
+        },
+
+        render: function () {
+        }
+    });
+
 
     var currentLocation = new CurrentLocation();
     var busStopData = new AreaBusStopData({location: currentLocation});
-    new LocationView({model: currentLocation});
-    new LocalStopsView({model: busStopData});
 
     new CircleView();
-    new BusStopsDotView({model: busStopData, location: currentLocation});
+    new BusStopsRadarView({model: busStopData, location: currentLocation});
 })
 ;
