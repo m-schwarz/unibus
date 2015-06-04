@@ -203,11 +203,13 @@ $(function () {
             this.model.bind('change', this.render);
             this.selectedBusStop = options.selectedBusStop;
             this.selectedBusStop.bind('change', this.render);
+            $(".next_busses",this.$el).hide();
             this.render();
         },
 
         render: function () {
-            this.$el.html("");
+            var nextBussesElement = $(".next_busses",this.$el);
+            nextBussesElement.html("");
             var selectedBusStop = this.selectedBusStop.get("selectedBusStop");
             var nextDepartures = this.selectedBusStop.get("nextDepartures");
 
@@ -231,11 +233,11 @@ $(function () {
                     var nextBussesEmptyTemplate = _.template($("#next-busses-template-empty").html());
                     element = $(nextBussesEmptyTemplate({name: selectedBusStop.name}));
                 }
-                var outer = this;
                 element.on("click", function () {
-                    outer.$el.html("");
+                    nextBussesElement.hide();
                 });
-                this.$el.html(element);
+                nextBussesElement.html(element);
+                nextBussesElement.show();
             }
         }
 
