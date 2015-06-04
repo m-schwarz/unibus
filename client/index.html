@@ -16,9 +16,8 @@
 </div>
 
 <div id="bus_stops" class="full"></div>
-
-</div>
 <div id="next_busses"></div>
+</div>
 
 
 
@@ -38,7 +37,7 @@
 
 <script type="text/template" id="next-busses-template">
     <div class="next_busses">
-        <h2><%- name %></h2>
+        <h2><%- name %></h2><div class="close">&#10060;</div>
         <table>
             <tr><th></th><th>Departure time</th><th>Direction</th></tr>
             <%= rows %>
@@ -46,9 +45,16 @@
     </div>
 </script>
 
+<script type="text/template" id="next-busses-template-empty">
+    <div class="next_busses">
+        <h2><%- name %></h2><div class="close">&#10060;</div>
+        <b>No departures</b>
+    </div>
+</script>
+
 <script type="text/template" id="next-busses-row-template">
-    <tr class="next_bus">
-        <td><%- name %></td>
+    <tr class="next_bus <%- style %>" >
+        <td><b><%- name %></b></td>
         <td><%- depTime %></td>
         <td><%- direction %></td>
     </tr>

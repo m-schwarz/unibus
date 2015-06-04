@@ -1,5 +1,6 @@
 body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    margin: 5px;
 }
 
 a {
@@ -25,9 +26,49 @@ a {
     background-color: black;
     position: absolute;
     cursor: pointer;
+    opacity:0;
+    transition: opacity 0.5s ease-in, width 0.1s ease-in, height 0.1s ease-in;
 }
 
-.next_bus td{
-    padding-right: 20px;
+.busstop:hover {
+    width: 12px;
+    height: 12px;
+}
 
+.next_busses td{
+    padding-right: 20px;
+}
+
+.next_busses {
+    position: absolute;
+    top: 5%;
+    right: 0;
+    font: 11px "Lucida Grande", Helvetica, Arial, sans-serif;
+    height: 90%;
+    background-color: #EEEEEE;
+    padding: 0.3%;
+    border: 1px solid #DDDDDD;
+    border-collapse: collapse;
+    overflow: auto;
+    min-width: 400px;
+}
+
+.next_busses .close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.next_busses h2 {
+    border-bottom: 1px solid gray;
+}
+
+.next_busses .odd {
+    background-color: #DDDDDD;
+}
+
+.next_busses .even {
+    background-color: #EAEAEA;
 }

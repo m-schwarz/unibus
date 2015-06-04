@@ -6,7 +6,7 @@ $(function () {
         var width = $(window).width();
         var height = $(window).height();
 
-        var size = Math.min(width, height);
+        var size = Math.min(width, height) - 10;
 
         $(".full").height(size + "px").width(size + "px");
     };
@@ -183,6 +183,9 @@ $(function () {
                     busStopElement.on("click", function () {
                         outer.selectedBusStop.set("selectedBusStop", busStop);
                     });
+                    setTimeout(function () {
+                        busStopElement.css("opacity", "1");
+                    }, Math.random() * 300 + 100);
                     outer.$el.append(busStopElement);
 
 
@@ -209,21 +212,33 @@ $(function () {
             var nextDepartures = this.selectedBusStop.get("nextDepartures");
 
             if (selectedBusStop) {
-                var nextBussesTemplate = _.template($("#next-busses-template").html());
-                var rows = "";
-                nextDepartures.forEach(function (departure) {
-                    var nextBussesRowTemplate = _.template($("#next-busses-row-template").html());
-                    rows += nextBussesRowTemplate({
-                        depTime: departure.date + " " + departure.time,
-                        name: departure.name,
-                        direction: departure.direction
+                var element;
+                if (nextDepartures.length) {
+                    var nextBussesTemplate = _.template($("#next-busses-template").html());
+                    var rows = "";
+                    nextDepartures.forEach(function (departure, index) {
+                        var nextBussesRowTemplate = _.template($("#next-busses-row-template").html());
+                        rows += nextBussesRowTemplate({
+                            depTime: departure.date + " " + departure.time,
+                            name: departure.name,
+                            direction: departure.direction,
+                            style: index % 2 ? "even" : "odd"
+                        });
                     });
+
+                    element = $(nextBussesTemplate({name: selectedBusStop.name, rows: rows}));
+                } else {
+                    var nextBussesEmptyTemplate = _.template($("#next-busses-template-empty").html());
+                    element = $(nextBussesEmptyTemplate({name: selectedBusStop.name}));
+                }
+                var outer = this;
+                element.on("click", function () {
+                    outer.$el.html("");
                 });
-
-                this.$el.html(nextBussesTemplate({name: selectedBusStop.name, rows: rows}));
+                this.$el.html(element);
             }
-
         }
+
     });
 
 
@@ -234,5 +249,4 @@ $(function () {
     new CircleView();
     new BusStopsRadarView({model: busStopData, location: currentLocation, selectedBusStop: selectedBusStop});
     new BusStopNextDeparturesView({model: selectedBusStop, selectedBusStop: selectedBusStop});
-})
-;
+});
