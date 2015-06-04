@@ -1,4 +1,21 @@
 /**
+ *
+ * This file implements the endpoint layer of the server.
+ *
+ * The server application is structures in three layers:
+ *
+ * +====================+
+ * |      endpoint      |   Receives and decodes REST/JSON messages from the client
+ * +====================+
+ *           |
+ * +--------------------+
+ * |        app         |   Handled caching and business logic (if any is added) of the application
+ * +--------------------+
+ *           |
+ * +--------------------+
+ * |       service      |   Implements the communication with Rejseplanen
+ * +--------------------+
+ *
  * Created by schwarz on 31/05/15.
  */
 

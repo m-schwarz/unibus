@@ -1,4 +1,21 @@
 /**
+ *
+ * This file implements the service layer of the server.
+ *
+ * The server application is structures in three layers:
+ *
+ * +--------------------+
+ * |      endpoint      |   Receives and decodes REST/JSON messages from the client
+ * +--------------------+
+ *           |
+ * +--------------------+
+ * |        app         |   Handled caching and business logic (if any is added) of the application
+ * +--------------------+
+ *           |
+ * +====================+
+ * |       service      |   Implements the communication with Rejseplanen
+ * +====================+
+ *
  * Created by schwarz on 31/05/15.
  */
 var http = require('http');
@@ -9,6 +26,14 @@ var url = require('url');
 var baseHost = "xmlopen.rejseplanen.dk";
 var basePath = "/bin/rest.exe/";
 
+/**
+ * Retrieves the stops in the area from Rejseplanen. Invokes hte given callback
+ *
+ * @param coordX The current latitute in millionths of degrees
+ * @param coordY The current longitute in millionths of degrees
+ * @param maxDistance The maximum distance of stops to return
+ * @param callback The callback to invoke when Rejseplanen returns a result
+ */
 function getStopsInArea(coordX, coordY, maxDistance, callback) {
     http.get({
             host: baseHost,
@@ -43,6 +68,12 @@ function getStopsInArea(coordX, coordY, maxDistance, callback) {
     );
 }
 
+/**
+ * Retrieves the next departures from a given stop from Rejseplanen.
+ *
+ * @param departureBoardId The ID of the departure board to list depatures for (possibly get this from getStopsInArea)
+ * @param callback The callback to invoke when Rejseplanen returns a result
+ */
 function getNextDepartures(departureBoardId, callback) {
     http.get({
         host: baseHost,
@@ -59,17 +90,17 @@ function getNextDepartures(departureBoardId, callback) {
             var doc = new dom().parseFromString(receivedData);
             var departures = [];
             var nodes = xpath.select("//DepartureBoard/Departure", doc);
-            nodes.forEach(function(node) {
+            nodes.forEach(function (node) {
                 var journeyDetail = xpath.select("JourneyDetailRef", node)[0];
                 departures.push({
-                    date : node.getAttribute("date"),
-                    time : node.getAttribute("time"),
-                    name : node.getAttribute("name"),
-                    direction : node.getAttribute("direction"),
-                    cancelled : !!node.getAttribute("cancelled"),
-                    finalStop : node.getAttribute("finalStop"),
-                    stop : node.getAttribute("stop"),
-                    detailsId : journeyDetail.getAttribute("ref")
+                    date: node.getAttribute("date"),
+                    time: node.getAttribute("time"),
+                    name: node.getAttribute("name"),
+                    direction: node.getAttribute("direction"),
+                    cancelled: !!node.getAttribute("cancelled"),
+                    finalStop: node.getAttribute("finalStop"),
+                    stop: node.getAttribute("stop"),
+                    detailsId: journeyDetail.getAttribute("ref")
                 });
             });
             callback(departures);
@@ -95,13 +126,13 @@ function getJourneyDetails(journeyDetailsId, callback) {
             var doc = new dom().parseFromString(receivedData);
             var stops = [];
             var nodes = xpath.select("//JourneyDetail/Stop", doc);
-            nodes.forEach(function(node) {
+            nodes.forEach(function (node) {
                 stops.push({
-                    name : node.getAttribute("name"),
-                    depTime : node.getAttribute("depTime"),
-                    depDate : node.getAttribute("depDate"),
-                    arrTime : node.getAttribute("arrTime"),
-                    arrDate : node.getAttribute("arrDate"),
+                    name: node.getAttribute("name"),
+                    depTime: node.getAttribute("depTime"),
+                    depDate: node.getAttribute("depDate"),
+                    arrTime: node.getAttribute("arrTime"),
+                    arrDate: node.getAttribute("arrDate"),
                     coordX: parseInt(node.getAttribute("x")),
                     coordY: parseInt(node.getAttribute("y"))
                 });
