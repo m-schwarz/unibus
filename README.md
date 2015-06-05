@@ -1,4 +1,4 @@
-# unibus
+# Unibus
 
 ## Purpose and description
 The Unibus application makes it possible to quickly get an overview of public transportation in the area. The application 
@@ -8,7 +8,7 @@ overview of all departurs in the local area, so that he can determine which bus 
 The appliaction is backed by data from Rejseplanen.
 
 ## Scope and architecture of the solution
-The application contains both a server side app and a client side app, both written in JavaScript. The client retrieves data
+The application contains both a server side app and a client side app (full stack), both written in JavaScript. The client retrieves data
 from the server through a simple REST/JSON api. 
 
 ## Server
@@ -68,3 +68,14 @@ The view is separated into three implementations parts:
 1. The CircleView which gives a radar-like graphical view of distances using concentric circles in alternating colors. The CircleView is generated using SVG and is in its current form relatively static. If I were to implement a feature where the user could select the maximum distance to bus stops, then the CircleView should be updatable so that the distance in real world meters would be constanct between two circle perimeters.
 2. The BusStopsRadarView which populates the CircleView (visually) with nearby bus stops. The BusStopsRadarView is updated when AreaBusStopData changes.
 3. The BusStopNextDeparturesView which lists upcoming departures form the selected bus stop. The BusStopNextDeparturesView is updated when the SelectedBusStop changes.
+
+I have no previous experience with Backbone but I have some previous experience with jQuery.
+
+### Running the client
+Simply go to the default url of the web application and the application will start.
+
+## Known bugs
+A small set of the bus stops containing non-ASCII characters have their non-ASCII characters replaces by garbage. This is caused by a bug in Rejseplanen where these characters are not transmitted using the encoding claimed by the XML file (while the rest of the bus stop names in the XML file are). Nothing has been done to work around this bug as it will likely be fixed by Rejseplanen in the future.
+
+## Hosted
+A hosted version of the application can be seen at http://52.28.94.66/ . The instance runs in Franfurt, Germany.
