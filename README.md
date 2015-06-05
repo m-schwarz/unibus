@@ -16,14 +16,14 @@ The server is written in JavaScript using node.js. I have built the server as a 
 layer that contacts Rejseplanen at the bottom, and app layer that handles caching (and could handle further business logic) in 
 the middle and a REST endpoint as the top layer:
 
-   +--------------------+
-  |      endpoint      |   Receives and decodes REST/JSON messages from the client
-  +--------------------+
-            |
-  +--------------------+
-  |        app         |   Handled caching and business logic (if any is added) of the application
-  +--------------------+
-            |
-  +====================+
-  |       service      |   Implements the communication with Rejseplanen
-  +====================+
+    +--------------------+
+    |      endpoint      |   Receives and decodes REST/JSON messages from the client
+    +--------------------+
+             |
+    +--------------------+
+    |        app         |   Handled caching and business logic (if any is added) of the application
+    +--------------------+
+              |
+    +====================+
+    |       service      |   Implements the communication with Rejseplanen
+    +====================+
