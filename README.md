@@ -69,8 +69,10 @@ The view is separated into three implementations parts:
 2. The BusStopsRadarView which populates the CircleView (visually) with nearby bus stops. The BusStopsRadarView is updated when AreaBusStopData changes.
 3. The BusStopNextDeparturesView which lists upcoming departures form the selected bus stop. The BusStopNextDeparturesView is updated when the SelectedBusStop changes.
 
+I have no previous experience with Backbone but I have some previous experience with jQuery.
+
 ### Running the client
 Simply go to the default url of the web application and the application will start.
 
 ## Hosted
-A hosted version of the application can be seen at ########
+A hosted version of the application can be seen at http://52.28.94.66/ . The instance runs in Franfurt, Germany.
