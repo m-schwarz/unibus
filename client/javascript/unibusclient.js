@@ -17,6 +17,10 @@ $(function () {
      * Model definitions for the bus app
      */
 
+    /**
+     * The CurrentLocation location model  represents the current geolocation of the user.
+     * This model is updated when the geolocation changes.
+     */
     var CurrentLocation = Backbone.Model.extend({
         defaults: {
             latitute: -1,
@@ -44,6 +48,11 @@ $(function () {
         }
     });
 
+    /**
+     * The AreaBusStopData model represents the set of bus stops in the area. This model is updated when
+     * CurrentLocation changes and the data is populated using data from the server side of the application
+     * (essentially by contacting the server endpoint).
+     */
     var AreaBusStopData = Backbone.Model.extend({
 
         defaults: {
@@ -74,6 +83,10 @@ $(function () {
         }
     });
 
+    /**
+     * The SelectedBusStop  represents the (in the interface) currently selected bus stop.
+     * This model is populated with departure information (from the server side) whenever the bus stop selection changes.
+     */
     var SelectedBusStop = Backbone.Model.extend({
         defaults: {
             selectedBusStop: undefined,
@@ -105,6 +118,10 @@ $(function () {
      * View definitions for the bus app
      */
 
+    /**
+     * The CircleView gives a radar-like graphical view of distances using concentric circles in alternating colors.
+     * The CircleView is generated using SVG and is in its current form relatively static.
+     */
     var CircleView = Backbone.View.extend({
         el: $('#circles'),
 
@@ -137,6 +154,10 @@ $(function () {
 
     });
 
+    /**
+     * The BusStopsRadarView which populates the CircleView (visually) with nearby bus stops.
+     * The BusStopsRadarView is updated when AreaBusStopData changes.
+     */
     var BusStopsRadarView = Backbone.View.extend({
         el: $('#bus_stops'),
 
@@ -195,6 +216,10 @@ $(function () {
 
     });
 
+    /**
+     * The BusStopNextDeparturesView lists upcoming departures form the selected bus stop. The BusStopNextDeparturesView is
+     * updated when the SelectedBusStop changes.
+     */
     var BusStopNextDeparturesView = Backbone.View.extend({
         el: $('#next_busses'),
 
@@ -203,12 +228,12 @@ $(function () {
             this.model.bind('change', this.render);
             this.selectedBusStop = options.selectedBusStop;
             this.selectedBusStop.bind('change', this.render);
-            $(".next_busses",this.$el).hide();
+            $(".next_busses", this.$el).hide();
             this.render();
         },
 
         render: function () {
-            var nextBussesElement = $(".next_busses",this.$el);
+            var nextBussesElement = $(".next_busses", this.$el);
             nextBussesElement.html("");
             var selectedBusStop = this.selectedBusStop.get("selectedBusStop");
             var nextDepartures = this.selectedBusStop.get("nextDepartures");
@@ -243,11 +268,16 @@ $(function () {
 
     });
 
+    /*
+     * Set up interconnections between views and model.
+     */
 
+    //Set up models
     var currentLocation = new CurrentLocation();
     var busStopData = new AreaBusStopData({location: currentLocation});
     var selectedBusStop = new SelectedBusStop();
 
+    //Set up views and their bindings to the models.
     new CircleView();
     new BusStopsRadarView({model: busStopData, location: currentLocation, selectedBusStop: selectedBusStop});
     new BusStopNextDeparturesView({model: selectedBusStop, selectedBusStop: selectedBusStop});
