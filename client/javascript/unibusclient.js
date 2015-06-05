@@ -177,7 +177,13 @@ $(function () {
             if (busStopList.length) {
                 var someBusStop = busStopList[0];
 
-                //Use knowledge from that old Greek guy to find distance in coordX/coordY units
+                /* Use knowledge from that old Greek guy to find distance in coordX/coordY degrees (or actually millionths of degrees)
+
+                 * NOTICE: Since degrees and meters are not proportional, this computation is only correct
+                 * when we look at relatively small distances (< ~hundreds of miles) and the value only
+                 * holds locally (a degree corresponds to more meters in Italy that it does in Denmark).
+                 * -- Both prerequisites holds for the use in this application. --
+                 */
                 var latitute = this.location.get("latitute");
                 var longitute = this.location.get("longitute");
                 var coordXLocation = Math.round(longitute * 1E6);
