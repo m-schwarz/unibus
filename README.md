@@ -44,3 +44,10 @@ The automated tests use the Mocha framework (http://mochajs.org/) and library ma
 
 Prior experience with the stack: I have written very little Node.js code (at the level of 'Hello world') prior to writing
 this application and it is my first time using Mocha and the xml libraries.
+
+### Running the server
+The server requires Node.js and npm to be installed. Simply run
+    
+    npm install
+
+to download all required libraries and run the bin/www script to start the server (on port 3000).
