@@ -24,6 +24,23 @@ the middle and a REST endpoint as the top layer:
     |        app         |   Handled caching and business logic (if any is added) of the application
     +--------------------+
               |
-    +====================+
+    +--------------------+
     |       service      |   Implements the communication with Rejseplanen
-    +====================+
+    +--------------------+
+
+The architecture also makes it possible to test various aspects of the server independently. At the server layer, the tests
+focus on whether the code is able to correctly parse the data from Rejseplanen, at the application layer on whether caching and
+application logic is implemented correctly and at the endpoint layer whether the client is able to communicate with the server.
+
+In principle (but not currently implemented), an alternative implementation of the service layer could be implemented 
+for testing the app layer. This way we could ensure that tests in the app layer would not break because of changing bus
+schedules, dataformats etc.
+
+Rejseplanen exposes its data through a stateless XML api and the service layer extracts the data from the XML using the
+'xmldom' (https://www.npmjs.com/package/xmldom) and 'xpath'
+(https://www.npmjs.com/package/xpath) modules.
+
+The automated tests use the Mocha framework (http://mochajs.org/) and library management for the server is done using 'npm'.
+
+Prior experience with the stack: I have written very little Node.js code (at the level of 'Hello world') prior to writing
+this application and it is my first time using Mocha and the xml libraries.
