@@ -75,7 +75,7 @@ I have no previous experience with Backbone but I have some previous experience 
 Simply go to the default url of the web application and the application will start.
 
 ## Known bugs
-A small set of the bus stops containing non-ASCII characters have their non-ASCII characters replaces by garbage. This is caused by a bug in Rejseplanen where these characters are not transmitted using the encoding claimed by the XML file. Nothing has been done to work around this bug as it will likely be fixed by Rejseplanen in the future.
+A small set of the bus stops containing non-ASCII characters have their non-ASCII characters replaces by garbage. This is caused by a bug in Rejseplanen where these characters are not transmitted using the encoding claimed by the XML file (while the rest of the bus stop names in the XML file are). Nothing has been done to work around this bug as it will likely be fixed by Rejseplanen in the future.
 
 ## Hosted
 A hosted version of the application can be seen at http://52.28.94.66/ . The instance runs in Franfurt, Germany.
