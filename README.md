@@ -68,3 +68,9 @@ The view is separated into three implementations parts:
 1. The CircleView which gives a radar-like graphical view of distances using concentric circles in alternating colors. The CircleView is generated using SVG and is in its current form relatively static. If I were to implement a feature where the user could select the maximum distance to bus stops, then the CircleView should be updatable so that the distance in real world meters would be constanct between two circle perimeters.
 2. The BusStopsRadarView which populates the CircleView (visually) with nearby bus stops. The BusStopsRadarView is updated when AreaBusStopData changes.
 3. The BusStopNextDeparturesView which lists upcoming departures form the selected bus stop. The BusStopNextDeparturesView is updated when the SelectedBusStop changes.
+
+### Running the client
+Simply go to the default url of the web application and the application will start.
+
+## Hosted
+A hosted version of the application can be seen at ########
