@@ -55,14 +55,14 @@ to download all required libraries and run the bin/www script to start the serve
 ## Client
 The client is written using a combination of Backbone.js and jQuery. Backbone.js is, in this application, used for separating model an view cleanly from each other. 
 
-## Model
+### Model
 The model is split into three parts: 
 
 1. The CurrentLocation location model which represents the current geolocation of the user. This model is updated when the geolocation changes.
 2. The AreaBusStopData model which represents the set of bus stops in the area. This model is updated when CurrentLocation changes and the data is populated using data from the server side of the application (essentially by contacting the server endpoint).
 3. The SelectedBusStop which represents the (in the interface) currently selected bus stop. This model is populated with departure information (from the server side) whenever the bus stop selection changes.
 
-## View
+### View
 The view is separated into three implementations parts:
 
 1. The CircleView which gives a radar-like graphical view of distances using concentric circles in alternating colors. The CircleView is generated using SVG and is in its current form relatively static. If I were to implement a feature where the user could select the maximum distance to bus stops, then the CircleView should be updatable so that the distance in real world meters would be constanct between two circle perimeters.
